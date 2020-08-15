@@ -1,0 +1,20 @@
+.video-btn{
+
+    padding: 10px;
+    &:hover{
+        background: var(--ion-color-medium);
+        cursor: pointer;
+        color: white
+    }
+}
+
+.uploading-container{
+    padding: 30px;
+}
+
+.youtube-video-container{
+    background: black;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+}

@@ -1,0 +1,80 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="close()">close</ion-button>
+    </ion-buttons>
+    <ion-title>video</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col>
+        <ion-segment [(ngModel)]="view">
+          <ion-segment-button value="library">Library</ion-segment-button>
+          <ion-segment-button value="youtube">Youtube</ion-segment-button>
+        </ion-segment>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid fixed *ngIf="view == 'library'">
+    <ion-row>
+      <ion-col>
+        <ion-buttons>
+          <label for="video" class="video-btn">Upload Video</label>
+          <input (change)="uploadVideo($event)" id="video" type="file" accept="video/*" style="display: none;">
+        </ion-buttons>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-card *ngFor="let video of videos">
+          <ion-item>
+            <ion-thumbnail *ngIf="!video.poster" slot="start">
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-thumbnail>
+            <ion-thumbnail *ngIf="video.poster" slot="start">
+              <img [src]="video.poster">
+            </ion-thumbnail>
+            <ion-label>
+              <p class="ion-text-wrap">{{ video.name}}</p>
+              <p *ngIf="video.loading < 1">
+                <ion-progress-bar [value]="video.loading"></ion-progress-bar>
+              </p>
+              <ion-buttons *ngIf="video.loading == 1" class="ion-hide-sm-up" slot="end">
+                <ion-button (click)="select(video)">select</ion-button>
+                <ion-button (click)="delete(video)">delete</ion-button>
+              </ion-buttons>
+            </ion-label>
+            <ion-buttons *ngIf="video.loading == 1" class="ion-hide-sm-down" slot="end">
+              <ion-button (click)="select(video)">select</ion-button>
+              <ion-button (click)="delete(video)">delete</ion-button>
+            </ion-buttons>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+  <ion-grid fixed *ngIf="view == 'youtube'">
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="stacked">Youtube URL</ion-label>
+          <ion-input (ionChange)="checkUrl()" [(ngModel)]="youtubeUrl"
+            placeholder="https://www.youtube.com/watch?v=yyDUC1LUXSU"></ion-input>
+        </ion-item>
+        <div [class]=" (trustedVideoUrl) ?  'youtube-video-container' : ''">
+          <iframe *ngIf="trustedVideoUrl" style="margin: auto" width="420" height="345" [src]="trustedVideoUrl">
+          </iframe>
+        </div>
+        <ion-button (click)="saveYoutubeVideo()" *ngIf="trustedVideoUrl" expand="full">Select Video</ion-button>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

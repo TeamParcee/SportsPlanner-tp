@@ -1,0 +1,16 @@
+ion-item{
+    color: #050505;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+ion-toolbar{
+    ion-buttons{
+    margin-right: 20px;
+    }
+}
+
+ion-content{
+    --padding-bottom: 100px !important;
+}
+

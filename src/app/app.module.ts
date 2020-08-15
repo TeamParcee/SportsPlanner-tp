@@ -8,11 +8,35 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { firebaseConfig } from 'src/environments/environment';
+import * as firebase from 'firebase/app';
+import 'firebase/analytics';
+import { QuillModule } from 'ngx-quill';
+import { PlyrModule } from 'ngx-plyr';
+
+
+
+firebase.initializeApp(firebaseConfig);
+firebase.analytics();
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+  imports: [
+    BrowserModule,
+    PlyrModule,
+    QuillModule.forRoot({
+      modules: {
+        toolbar: [
+          ['bold', 'italic', 'clean', 'align', 'underline', 'strike', 'link', 'image', { 'list': 'ordered' }, { 'list': 'bullet' }, 'video', { size: ['normal', 'large'], }, 'clean'],
+
+        ]
+      }
+    }),
+    IonicModule.forRoot({
+      mode: 'md'
+    }),
+    AppRoutingModule],
   providers: [
     StatusBar,
     SplashScreen,
@@ -20,4 +44,4 @@ import { AppRoutingModule } from './app-routing.module';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

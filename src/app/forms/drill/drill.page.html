@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="close()">
+        close
+      </ion-button>
+    </ion-buttons>
+    <ion-title>drill</ion-title>
+    <ion-buttons slot="end">
+      <ion-button [disabled]="!drill.video || name.invalid" (click)="save()">
+        Save
+      </ion-button>
+      <ion-button *ngIf="drill.id" (click)="delete()">
+        delete
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div (click)="addVideo()" class="video-container">
+    <div *ngIf="!drill.video?.url">
+      <ion-icon name="camera-outline"></ion-icon>
+      <div class="text">Add Video</div>
+    </div>
+    <img class="poster" *ngIf="drill.video?.url" [src]="drill.video?.poster">
+  </div>
+  <ion-list lines="none">
+    <ion-card>
+      <ion-item>
+        <ion-label position="stacked"></ion-label>
+        <ion-input #name="ngModel" required [(ngModel)]="drill.name" placeholder="Run and Gather Drill"></ion-input>
+      </ion-item>
+    </ion-card>
+    <ion-card>
+      <quill-editor [(ngModel)]="drill.notes" class="quill">
+      </quill-editor>
+    </ion-card>
+  </ion-list>
+
+</ion-content>

@@ -1,0 +1,120 @@
+<ion-content>
+
+  <ion-grid *ngIf="user" fixed>
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-toolbar>
+            <ion-title>
+              <ion-label>
+                {{ user?.fname + ' ' + user?.lname }}
+                <ion-buttons class="ion-hide-sm-up" slot="end">
+                  <ion-button (click)="signOut()">Sign Out</ion-button>
+                  <ion-button (click)="deleteAccount()">Delete Account</ion-button>
+                </ion-buttons>
+              </ion-label>
+            </ion-title>
+            <ion-buttons class="ion-hide-sm-down" slot="end">
+              <ion-button (click)="signOut()">Sign Out</ion-button>
+              <ion-button (click)="deleteAccount()">Delete Account</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div style="margin: auto; text-align: center">
+          <div class="profile-img">
+            <img *ngIf="!imagePreview" style="display: inline-block;" [src]="user.photoUrl">
+            <img *ngIf="imagePreview" style="display: inline-block;" [src]="imagePreview">
+          </div>
+          <div>
+
+            <ion-button size="small" fill="clear">
+              <label class="camera-btn" for="profile-pic">Change</label>
+            </ion-button>
+
+            <input [(ngModel)]="imageInput" (change)="cropImage($event)" style="display: none;" accept="image/*"
+              type="file" id="profile-pic">
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div *ngIf="imagePreview" class="save-image-container">
+          <ion-button (click)="cancelImage()" fill="clear" size="small" color="danger">Cancel</ion-button>
+          <ion-button (click)="saveImage()" fill="clear" size="small" color="success">Save</ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-item lines="none">
+            <ion-label position="stacked">First Name</ion-label>
+            <ion-input [(ngModel)]="user.fname" placeholder="First Name"></ion-input>
+            <ion-buttons slot="end">
+              <ion-button (click)="saveFname()" *ngIf="user.fname != oUser.fname" size="small" color="success">save
+              </ion-button>
+            </ion-buttons>
+          </ion-item>
+        </ion-card>
+        <ion-card>
+          <ion-item>
+            <ion-label position="stacked">Last Name</ion-label>
+            <ion-input [(ngModel)]="user.lname" placeholder="First Name"></ion-input>
+            <ion-buttons slot="end">
+              <ion-button (click)="saveLname()" *ngIf="user.lname != oUser.lname" size="small" color="success">save
+              </ion-button>
+            </ion-buttons>
+          </ion-item>
+        </ion-card>
+        <ion-card>
+          <ion-item>
+            <ion-label position="stacked">Email</ion-label>
+            <ion-input [(ngModel)]="user.email" placeholder="First Name"></ion-input>
+            <ion-buttons slot="end">
+              <ion-button (click)="saveEmail()" *ngIf="user.email != oUser.email" size="small" color="success">save
+              </ion-button>
+            </ion-buttons>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- Coach Info -->
+  <ion-grid fixed class="ion-margin-top">
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-toolbar>
+            <ion-title>Coach</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="addCoach()">Add Coach</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-card *ngFor="let coach of coaches">
+          <ion-item lines="none">
+            <ion-avatar slot="start">
+              <img [src]="coach.photoUrl">
+            </ion-avatar>
+            <ion-label>
+              {{ coach.fname + ' ' + coach.lname }}
+              <p> {{ coach.teamName }} </p>
+            </ion-label>
+            <ion-button *ngIf="user.uid != coach.uid" fill="clear" (click)="removeCoach(coach)">remove coach
+            </ion-button>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

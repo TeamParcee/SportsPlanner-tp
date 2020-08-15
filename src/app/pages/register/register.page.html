@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Sports Planner</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col size-lg="6" offset-lg="3">
+        <ion-toolbar>
+          <ion-title>Create Account</ion-title>
+          <ion-buttons slot="start">
+            <ion-back-button defaultHref="/login"></ion-back-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-lg="6" offset-lg="3">
+        <ion-card>
+          <ion-item>
+            <ion-label position="stacked">First Name</ion-label>
+            <ion-input [(ngModel)]="user.fname" required minlength="2" #fname="ngModel" placeholder="Jane"></ion-input>
+          </ion-item>
+        </ion-card>
+        <ion-card>
+          <ion-item>
+            <ion-label position="stacked">Last Name</ion-label>
+            <ion-input [(ngModel)]="user.lname" required minlength="2" #lname="ngModel" placeholder="Doe"></ion-input>
+          </ion-item>
+        </ion-card>
+        <ion-card>
+          <ion-item>
+            <ion-label position="stacked">Email</ion-label>
+            <ion-input [(ngModel)]="user.email" type="email" required email #email="ngModel"
+              placeholder="jane.doe@gmail.com"></ion-input>
+          </ion-item>
+        </ion-card>
+        <ion-card>
+          <ion-item>
+            <ion-label position="stacked">Password</ion-label>
+            <ion-input type="password" [(ngModel)]="user.password" required minlength="6" #password="ngModel" placeholder="*******">
+            </ion-input>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col offset-md="3" size-md="6">
+        <ion-button (click)="register()" [disabled]="fname.invalid || lname.invalid || email.invalid || password.invalid"
+          routerLink="/register" expand="full">Create Account</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col offset-md="3" size-md="6">
+        <p style="max-width: 450px;" class="ion-text-center">By creating an account you agree to our <b>Terms and
+            Conditions</b> and <b>Privacy
+            Policy</b></p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

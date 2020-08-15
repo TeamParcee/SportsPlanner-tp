@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Complete Profile</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col size-lg="6" offset-lg="3">
+        <h3>{{ question }}</h3>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="step == 1">
+      <ion-col size-lg="6" offset-lg="3">
+        <ion-button (click)="updateStep('2')">Head Coach</ion-button>
+        <ion-button (click)="selectCoach()" color="primary">Not Head Coach</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="step == 2">
+      <ion-col size-lg="6" offset-lg="3">
+        <ion-card>
+          <ion-item>
+            <ion-label position="stacked">Team Name</ion-label>
+            <ion-input required [(ngModel)]="user.teamName" placeholder="Elkhorn Attack!"></ion-input>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="step == 3">
+      <ion-col size-lg="6" offset-lg="3">
+        <ion-button (click)="user.sport = 'Football'" (click)="updateStep(4)" expand="full" fill="clear">
+          Football</ion-button>
+        <ion-button (click)="user.sport = 'Basketball'" (click)="updateStep(4)" fill="clear" expand="full"
+          color="primary">Basketball
+        </ion-button>
+        <ion-button (click)="user.sport = 'Volleyball'" (click)="updateStep(4)" fill="clear" expand="full"
+          color="primary">Volleyball
+        </ion-button>
+        <ion-button (click)="user.sport = 'Baseball'" (click)="updateStep(4)" fill="clear" expand="full"
+          color="primary">Baseball</ion-button>
+        <ion-button (click)="user.sport = 'Softball'" (click)="updateStep(4)" fill="clear" expand="full"
+          color="primary">Softball</ion-button>
+        <ion-button (click)="user.sport = 'Soccer'" (click)="updateStep(4)" fill="clear" expand="full" color="primary">
+          Soccer</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="step == 4">
+      <ion-col size-lg="6" offset-lg="3">
+        <ion-card>
+          <ion-item>
+            <ion-label position="stacked">Coach Passcode</ion-label>
+            <ion-input placeholder="Football1!" [(ngModel)]="user.passcode"></ion-input>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size-md="4" offset-md="4">
+        <ion-button (click)="step = (step != '1') ? step - 1 : '1'" color="medium" *ngIf="step != '1'">
+          Back
+        </ion-button>
+        <ion-button [disabled]="!user.teamName" *ngIf="step == '2'" (click)="updateStep('3')" style="margin: auto;"
+          color="success">Save</ion-button>
+
+        <ion-button [disabled]="!user.passcode" *ngIf="step == '4'" (click)="save()" style="margin: auto;"
+          color="success">Save</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="close()">Close</ion-button>
+    </ion-buttons>
+    <ion-title> {{ (plan.id) ? "Edit Plan" : "New Plan" }} </ion-title>
+    <ion-buttons slot="end">
+      <ion-button *ngIf="plan.id" (click)="delete()">delete</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="light">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+
+        <ion-card>
+          <ion-item>
+            <ion-label>Date/Time</ion-label>
+            <ion-datetime [(ngModel)]="datetime" #date="ngModel" required displayFormat="DDD MMM DD YYYY h:mm a"
+              pickerFormat="MMM DD YYYY h:mm a"></ion-datetime>
+          </ion-item>
+        </ion-card>
+        <ion-card>
+          <ion-item>
+            <ion-label>Use Template</ion-label>
+            <ion-select></ion-select>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button *ngIf="!plan.id" (click)="create()" [disabled]="date.invalid" expand="full">Create</ion-button>
+        <ion-button *ngIf="plan.id" (click)="save()" [disabled]="date.invalid" expand="full">Save</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

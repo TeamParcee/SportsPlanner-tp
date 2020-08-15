@@ -1,0 +1,44 @@
+<ion-content>
+
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col>
+        <ion-buttons slot="end">
+          <ion-button *ngIf="user?.uid == coach?.uid" (click)="addDrill()">Add Drill</ion-button>
+        </ion-buttons>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-searchbar style="max-width: 500px; margin: auto" (ionChange)="search($event)"></ion-searchbar>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col [routerLink]="'/view-drill/' + drill.id " class="ion-align-self-stretch" size-xs="12" size-md="4"
+        size-lg="3" *ngFor="let drill of drills">
+        <ion-card class="ion-no-margin ion-no-padding" style="height: 100%">
+          <div class="poster-background"></div>
+          <ion-skeleton-texts style="height: 75%; width: 100%" animated *ngIf="!drill?.video?.skeleton">
+          </ion-skeleton-texts>
+          <img (load)="drill.video.skeleton = true" *ngIf="drill?.video?.poster" style="height: 75%; width: 100%;"
+            [src]="drill.video.poster">
+          <ion-item lines="none">
+            <ion-label>
+              {{ drill.name }}
+              <p *ngIf="drill.coach">
+                <ion-item lines="none" class="ion-no-padding">
+                  <ion-avatar style="height: 20px; width: 20px" slot="start">
+                    <img [src]="drill.coach.photoUrl">
+                  </ion-avatar>
+                  <ion-label>
+                    <p>{{drill.coach?.fname + ' ' + drill.coach?.lname }}</p>
+                  </ion-label>
+                </ion-item>
+              </p>
+            </ion-label>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

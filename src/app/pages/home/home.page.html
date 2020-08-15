@@ -1,0 +1,185 @@
+<ion-content>
+
+
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-toolbar>
+            <ion-title> {{ coach.teamName }}</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="changeTeam()">Change Team</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid *ngIf="noUpcommingPlan" class="no-plan-container" fixed>
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <p class="text ion-text-center">There are no upcoming plans</p>
+          <ion-button *ngIf="coach.uid == user.uid" fill="clear" (click)="createPlan()" expand="full">Create A plan
+          </ion-button>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+  <!-- Active Plan -->
+  <ion-grid *ngIf="plan" class="active-plan-container" fixed>
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-item lines="none">
+            <ion-label>
+              {{ plan.datetime | date: 'EEEE MMM dd, yyyy h:mm a'}}
+              <p style="display: inline; margin-left: 5px" class="ion-hide-sm-down">
+                ({{ moment(plan.datetime, 'x').fromNow() }})</p>
+              <p class="ion-hide-sm-up">({{ moment(plan.datetime, 'x').fromNow() }})</p>
+              <ion-buttons class="ion-hide-sm-up" slot="end">
+                <ion-button *ngIf="user.uid == coach.uid" (click)="editPlan()">edit</ion-button>
+              </ion-buttons>
+              <p>
+                {{(plan.datetime | date: 'h:mm a') + ' - ' + (plan.endTime | date: 'h:mm a') + ' | ' +  (plan.duration | duration)}}
+              </p>
+            </ion-label>
+            <ion-buttons class="ion-hide-sm-down" slot="end">
+              <ion-button *ngIf="user.uid == coach.uid" (click)="editPlan()">edit</ion-button>
+            </ion-buttons>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+  <!-- PERIODS  -->
+  <ion-grid *ngIf="plan" fixed>
+    <ion-row>
+      <ion-col style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="title">Periods</div>
+        <ion-button color="success" *ngIf="editing" (click)="saveUpdates()">save </ion-button>
+      </ion-col>
+      <ion-col>
+
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-list lines="none">
+          <ion-reorder-group (ionItemReorder)="doReorder($event)" [disabled]="(user?.uid != coach?.uid) ? true : false">
+            <div *ngFor="let period of plan.periods">
+
+              <!-- Not edit mode for periods -->
+              <ion-card class="not-edit-mode" *ngIf="!period.edit">
+
+                <ion-item>
+                  <ion-reorder slot="start"></ion-reorder>
+                  <ion-label> {{ period.name }}
+                    <p>
+                      {{(period.startTime | date: 'h:mm a') + ' - ' + (period.endTime | date: 'h:mm a') + ' | ' +  (period.duration | duration)}}
+                    </p>
+                    <ion-buttons class="ion-hide-sm-up">
+                      <ion-button *ngIf="user.uid == coach.uid" (click)="editing = true" fill="clear">edit</ion-button>
+                      <ion-button (click)="period.showNotes = !period.showNotes" fill="clear">notes</ion-button>
+                      <ion-button *ngIf="user.uid == coach.uid" (click)="removePeriod(period)" fill="clear">remove
+                      </ion-button>
+                    </ion-buttons>
+                  </ion-label>
+                  <ion-buttons class="ion-hide-sm-down">
+                    <ion-button *ngIf="user.uid == coach.uid" (click)="period.edit = !period.edit; editing = true"
+                      fill="clear">edit</ion-button>
+                    <ion-button [style]="(period.showNotes) ? 'font-weight: bold' : 'font-weight: 400' "
+                      (click)="period.showNotes = !period.showNotes" fill="clear">notes</ion-button>
+                    <ion-button *ngIf="user.uid == coach.uid" (click)="removePeriod(period)" fill="clear">remove
+                    </ion-button>
+                  </ion-buttons>
+                </ion-item>
+                <ion-card-content *ngIf="period.showNotes">
+                  <ion-buttons>
+                    <ion-button *ngIf="!period.editNotes && user?.uid == coach?.uid"
+                      (click)="period.editNotes = true; editing = true">edit
+                    </ion-button>
+                    <!-- <ion-button *ngIf="period.editNotes" (click)="saveNotes(period)">save </ion-button> -->
+                  </ion-buttons>
+                  <quill-view-html *ngIf="!period.editNotes" [content]="period.notes" theme="snow"></quill-view-html>
+                  <quill-editor [(ngModel)]="period.notes" *ngIf="period.editNotes" class="quill">
+                  </quill-editor>
+                </ion-card-content>
+              </ion-card>
+
+              <!-- Edit mode for periods -->
+              <ion-card *ngIf="period.edit">
+
+                <ion-row>
+                  <ion-col size="6">
+                    <ion-item>
+                      <ion-label position="stacked">Period Name</ion-label>
+                      <ion-input [(ngModel)]="period.name" required placeholder="Team Warm Ups">
+                      </ion-input>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="6">
+                    <ion-item>
+                      <ion-label position="stacked">Duration (mins)</ion-label>
+                      <ion-input min="1" step="1" type="number" required [(ngModel)]="period.duration" placeholder="10">
+                      </ion-input>
+                    </ion-item>
+                  </ion-col>
+                  <!-- <ion-col size="3">
+                    <ion-button *ngIf="period.name != '' && period.duration != ''" (click)="savePeriod(period)" fill="clear"
+                      color="success">save</ion-button>
+                  </ion-col> -->
+                </ion-row>
+              </ion-card>
+            </div>
+          </ion-reorder-group>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+
+  <!-- NEW PERIOD -->
+  <ion-grid *ngIf="plan && user.uid == coach.uid" fixed>
+    <ion-row>
+      <ion-col>
+        <div class="title">New Period</div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-list lines="none">
+          <ion-card>
+
+            <ion-row>
+              <ion-col size="6">
+                <ion-item>
+                  <ion-label position="stacked">Period Name</ion-label>
+                  <ion-input #periodName="ngModel" [(ngModel)]="newPeriod.name" required placeholder="Team Warm Ups">
+                  </ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col size="6">
+                <ion-item>
+                  <ion-label position="stacked">Duration (mins)</ion-label>
+                  <ion-input min="1" step="1" type="number" #periodDuration="ngModel" required
+                    [(ngModel)]="newPeriod.duration" placeholder="10"></ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col size="3">
+                <ion-button *ngIf="periodName.valid && periodDuration.valid" (click)="createPeriod()" fill="clear"
+                  color="success">Create</ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-card>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
